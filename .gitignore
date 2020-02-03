@@ -1,1 +1,7 @@
 credentials
+
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
+
+variables.auto.tfvars
