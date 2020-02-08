@@ -104,8 +104,12 @@ resource "kubernetes_deployment" "nginx-deployment" {
 
       spec {
         container {
-          image = "nginx:1.7.8"
+          image = "nginx:1.17.8"
           name  = "app-nginx"
+          
+          port {
+            container_port = 80
+          }
 
           resources {
             limits {
@@ -116,21 +120,6 @@ resource "kubernetes_deployment" "nginx-deployment" {
               cpu    = "250m"
               memory = "50Mi"
             }
-          }
-
-          liveness_probe {
-            http_get {
-              path = "/nginx_status"
-              port = 80
-
-              http_header {
-                name  = "X-Custom-Header"
-                value = "Awesome"
-              }
-            }
-
-            initial_delay_seconds = 3
-            period_seconds        = 3
           }
         }
       }
