@@ -79,7 +79,7 @@ resource "google_container_node_pool" "general_purpose" {
   }
 }
 
-resource "kubernetes_deployment" "nginx-deployment" {
+resource "kubernetes_deployment" "nginx_deployment" {
   metadata {
     name = "deployment-terraform-starter"
     labels = {
@@ -104,11 +104,11 @@ resource "kubernetes_deployment" "nginx-deployment" {
 
       spec {
         container {
-          image = "nginx:1.17.8"
+          image = "${var.docker_image}"
           name  = "app-nginx"
           
           port {
-            container_port = 80
+            container_port = 3000
           }
 
           resources {
@@ -126,6 +126,24 @@ resource "kubernetes_deployment" "nginx-deployment" {
     }
   }
 }
+
+resource "kubernetes_service" "nginx" {
+  metadata {
+    name = "nginx-example"
+  }
+  spec {
+    selector = {
+      app = "${kubernetes_deployment.nginx_deployment.metadata[0].labels.app}"
+    }
+    port {
+      port        = 80
+      target_port = 3000
+    }
+
+    type = "LoadBalancer"
+  }
+}
+
 
 # The following outputs allow authentication and connectivity to the GKE Cluster
 # by using certificate-based authentication.

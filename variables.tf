@@ -36,3 +36,9 @@ variable "general_purpose_max_node_count" {
   type        = number
 }
 
+variable "docker_image" {
+  type        = string
+  description = "docker image in deployment"
+}
+
+
